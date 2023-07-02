@@ -8,7 +8,7 @@ Follow these steps to install and run the script:
 
 # 1. Clone the repository:
 
-git clone https://github.com/TheMxolisi/hash_brute.git
+git clone https://github.com/Hackermxo/hash_brute.git
 
 
 # 2. Change into the project directory:
