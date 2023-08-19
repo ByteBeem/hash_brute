@@ -13,7 +13,7 @@ def worker(args):
     print(f"Trying password: {line}")
 
             # Calculate the hash for each word in the wordlist
-            hash_result = None
+        hash_result = None
             if hash_type == 1:
                 hash_result = hashlib.md2(line.encode()).hexdigest()
             elif hash_type == 2:
