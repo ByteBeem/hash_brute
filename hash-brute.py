@@ -1,6 +1,6 @@
 import hashlib
 import bcrypt
-from crypto.Hash import MD4
+from Crypto.Hash import MD4
 import argon2
 import zlib
 from passlib.hash import argon2 as passlib_argon2
