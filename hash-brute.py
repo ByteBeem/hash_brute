@@ -4,13 +4,13 @@ from Crypto.Hash import MD4
 import argon2
 import zlib
 from passlib.hash import argon2 as passlib_argon2
+from multiprocessing import Pool, cpu_count
 
-def brute_force_hash(hashed_value, hash_type):
-    # Load the wordlist
-    with open('ByteBeemWordlist.txt', 'r') as file:
-        for line in file:
-            line = line.strip()
-            print(f"Trying password: {line}")
+
+
+def worker(args):
+    hashed_value, hash_type, line = args
+    print(f"Trying password: {line}")
 
             # Calculate the hash for each word in the wordlist
             hash_result = None
@@ -126,14 +126,18 @@ def brute_force_hash(hashed_value, hash_type):
                             pass
                     continue
 
-            # Check if the calculated hash matches the provided hash
-            if hash_result == hashed_value:
-                print(f"Hash cracked! The original value is: {line}")
-                print(f"Found hash type: {hash_type}")
-                return
+def brute_force_hash(hashed_value, hash_type, use_threads):
+    with open('ByteBeemWordlist.txt', 'r') as file:
+        lines = [line.strip() for line in file]
 
-    # If the hash is not cracked, print a message
-    print("Hash not found in the wordlist.")
+    tasks = [(hashed_value, hash_type, line) for line in lines]
+
+    if use_threads:
+        with Pool(cpu_count()) as pool:
+            pool.map(worker, tasks)
+    else:
+        with Pool(cpu_count()) as pool:
+            pool.starmap(worker, tasks)
 
 def main():
     print("Hash_brute : Themxolisi")
@@ -149,17 +153,22 @@ def main():
     print("45. bcrypt\n46. Argon2")
     print()
 
+    
+
     hashed_value = input("Enter the hashed value: ")
     hash_type = input("Enter the hash type (1-46) or '0' to try all types: ")
 
+    use_threads = False
+    if hash_type == '0':
+        use_threads = True
+
     if hash_type == '0':
         for i in range(2, 46):
-            brute_force_hash(hashed_value, i)
+            brute_force_hash(hashed_value, i, use_threads)
     else:
         hash_type = int(hash_type)
-        brute_force_hash(hashed_value, hash_type)
-
-    brute_force_hash(hashed_value, hash_type)
+        brute_force_hash(hashed_value, hash_type, use_threads)
 
 if __name__ == '__main__':
     main()
+
