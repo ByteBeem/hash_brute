@@ -7,7 +7,7 @@ from passlib.hash import argon2 as passlib_argon2
 
 def brute_force_hash(hashed_value, hash_type):
     # Load the wordlist
-    with open('wordlist.txt', 'r') as file:
+    with open('ByteBeemWordlist.txt', 'r') as file:
         for line in file:
             line = line.strip()
             print(f"Trying password: {line}")
